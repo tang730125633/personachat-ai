@@ -1,0 +1,5 @@
+{
+  "name": "PersonaChat AI",
+  "description": "An intelligent AI chatbot capable of switching between multiple distinct personalities, powered by Gemini.",
+  "requestFramePermissions": []
+}
