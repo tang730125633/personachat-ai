@@ -4,8 +4,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    // 检测是否是 Vercel 环境
+    const isVercel = process.env.VERCEL === '1';
+
     return {
-      base: '/personachat-ai/',
+      base: isVercel ? '/' : '/personachat-ai/',
       server: {
         port: 3000,
         host: '0.0.0.0',
