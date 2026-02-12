@@ -1,19 +1,31 @@
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 import { Personality } from "../types";
 
-const API_KEY = (process as any).env?.GEMINI_API_KEY || '';
-
 class GeminiService {
-  private ai: GoogleGenAI;
+  private ai: GoogleGenAI | null = null;
   private chatSession: Chat | null = null;
-  private currentModel: string = 'gemini-3-flash-preview';
+  private currentModel: string = 'gemini-2.0-flash';
+  private apiKey: string = '';
 
-  constructor() {
-    this.ai = new GoogleGenAI({ apiKey: API_KEY });
+  // Initialize with API key
+  initialize(apiKey: string) {
+    if (!apiKey || apiKey.trim() === '') {
+      throw new Error("API Key is required");
+    }
+    this.apiKey = apiKey;
+    this.ai = new GoogleGenAI({ apiKey });
+  }
+
+  // Check if service is initialized
+  isInitialized(): boolean {
+    return this.ai !== null;
   }
 
   // Initialize or reset a chat session with a specific personality
   startChat(personality: Personality) {
+    if (!this.ai) {
+      throw new Error("GeminiService not initialized. Please set API Key first.");
+    }
     this.chatSession = this.ai.chats.create({
       model: this.currentModel,
       config: {
